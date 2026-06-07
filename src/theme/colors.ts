@@ -65,6 +65,8 @@ export const colors = {
   sand: palette.sand50,
   sand300: palette.sand300,
   amber: palette.amber500,
+  white: palette.white,
+  navy900: palette.navy900,
 
   // Text
   text: palette.navy700,
