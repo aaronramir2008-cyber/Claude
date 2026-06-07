@@ -148,6 +148,7 @@ const styles = StyleSheet.create({
   handoffName: {
     fontFamily: 'PlayfairDisplay_700Bold',
     fontSize: 52,
+    lineHeight: 66,
     color: colors.sand,
     marginVertical: spacing.md,
     textAlign: 'center',

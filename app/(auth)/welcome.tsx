@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
   mark: {
     fontFamily: 'PlayfairDisplay_700Bold',
     fontSize: 72,
+    lineHeight: 92,
     color: colors.sand,
     letterSpacing: -1,
   },

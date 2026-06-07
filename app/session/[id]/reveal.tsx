@@ -125,6 +125,7 @@ const styles = StyleSheet.create({
   winnerName: {
     fontFamily: 'PlayfairDisplay_700Bold',
     fontSize: 44,
+    lineHeight: 54,
     color: colors.sand,
     letterSpacing: -0.5,
     textAlign: 'center',

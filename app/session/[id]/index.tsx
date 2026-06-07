@@ -158,6 +158,7 @@ const styles = StyleSheet.create({
   code: {
     fontFamily: 'PlayfairDisplay_700Bold',
     fontSize: 44,
+    lineHeight: 56,
     letterSpacing: 10,
     color: colors.sand,
   },
