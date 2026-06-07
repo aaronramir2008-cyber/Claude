@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { Image, Pressable, StyleSheet, View } from 'react-native';
+import { useRef, useState } from 'react';
+import { Animated, Image, Pressable, StyleSheet, View } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import * as Haptics from 'expo-haptics';
 import { Ionicons } from '@expo/vector-icons';
@@ -18,7 +18,6 @@ export function PostCard({ post }: { post: FeedPost }) {
   const [count, setCount] = useState(() => 3 + Math.floor(Math.random() * 40));
 
   const react = (emoji: string) => {
-    void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     setReaction((prev) => {
       if (prev === emoji) {
         setCount((c) => c - 1);
@@ -85,13 +84,12 @@ export function PostCard({ post }: { post: FeedPost }) {
 
         <View style={styles.reactRow}>
           {REACTIONS.map((emoji) => (
-            <Pressable
+            <ReactionButton
               key={emoji}
+              emoji={emoji}
+              selected={reaction === emoji}
               onPress={() => react(emoji)}
-              style={[styles.reactBtn, reaction === emoji && styles.reactActive]}
-            >
-              <AppText style={styles.reactEmoji}>{emoji}</AppText>
-            </Pressable>
+            />
           ))}
           <View style={styles.flex} />
           <AppText variant="caption" color={colors.textMuted}>
@@ -100,6 +98,42 @@ export function PostCard({ post }: { post: FeedPost }) {
         </View>
       </View>
     </View>
+  );
+}
+
+/** A single reaction with a satisfying pop + clear selected state. */
+function ReactionButton({
+  emoji,
+  selected,
+  onPress,
+}: {
+  emoji: string;
+  selected: boolean;
+  onPress: () => void;
+}) {
+  const scale = useRef(new Animated.Value(1)).current;
+
+  const press = () => {
+    void Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    Animated.sequence([
+      Animated.spring(scale, { toValue: 1.5, useNativeDriver: true, speed: 50 }),
+      Animated.spring(scale, { toValue: 1, useNativeDriver: true, speed: 16, bounciness: 16 }),
+    ]).start();
+    onPress();
+  };
+
+  return (
+    <Pressable onPress={press} hitSlop={6}>
+      <Animated.View
+        style={[
+          styles.reactBtn,
+          selected && styles.reactActive,
+          { transform: [{ scale }] },
+        ]}
+      >
+        <AppText style={styles.reactEmoji}>{emoji}</AppText>
+      </Animated.View>
+    </Pressable>
   );
 }
 
@@ -157,6 +191,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: colors.surfaceSunken,
   },
-  reactActive: { backgroundColor: colors.sand300 },
+  reactActive: {
+    backgroundColor: colors.primary,
+    borderWidth: 2,
+    borderColor: colors.accent,
+  },
   reactEmoji: { fontSize: 18 },
 });
